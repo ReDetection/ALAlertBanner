@@ -197,7 +197,6 @@ static CGFloat const kForceHideAnimationDuration = 0.1f;
         _titleLabel.layer.shadowOpacity = 0.3f;
         _titleLabel.layer.shadowRadius = 0.f;
     }
-
     [self addSubview:_titleLabel];
     
     _subtitleLabel = [[UILabel alloc] init];
@@ -534,7 +533,7 @@ static CGFloat const kForceHideAnimationDuration = 0.1f;
     BOOL isSuperviewKindOfWindow = ([superview isKindOfClass:[UIWindow class]]);
     
     CGSize maxLabelSize = CGSizeMake(superview.bounds.size.width - (kMargin*3) - self.styleImageView.image.size.width, CGFLOAT_MAX);
-    CGFloat titleLabelHeight = AL_SINGLELINE_TEXT_HEIGHT(self.titleLabel.text, self.titleLabel.font);
+    CGFloat titleLabelHeight = AL_MULTILINE_TEXT_HEIGHT(self.titleLabel.text, self.titleLabel.font, maxLabelSize, self.titleLabel.lineBreakMode);
     CGFloat subtitleLabelHeight = AL_MULTILINE_TEXT_HEIGHT(self.subtitleLabel.text, self.subtitleLabel.font, maxLabelSize, self.subtitleLabel.lineBreakMode);
     CGFloat heightForSelf = titleLabelHeight + subtitleLabelHeight + (self.subtitleLabel.text == nil || self.titleLabel.text == nil ? kMargin*2 : kMargin*2.5);
     
@@ -590,7 +589,7 @@ static CGFloat const kForceHideAnimationDuration = 0.1f;
 
 - (void)updateSizeAndSubviewsAnimated:(BOOL)animated {
     CGSize maxLabelSize = CGSizeMake(self.superview.bounds.size.width - (kMargin*3.f) - self.styleImageView.image.size.width, CGFLOAT_MAX);
-    CGFloat titleLabelHeight = AL_SINGLELINE_TEXT_HEIGHT(self.titleLabel.text, self.titleLabel.font);
+    CGFloat titleLabelHeight = AL_MULTILINE_TEXT_HEIGHT(self.titleLabel.text, self.titleLabel.font, maxLabelSize, self.titleLabel.lineBreakMode);
     CGFloat subtitleLabelHeight = AL_MULTILINE_TEXT_HEIGHT(self.subtitleLabel.text, self.subtitleLabel.font, maxLabelSize, self.subtitleLabel.lineBreakMode);
     CGFloat heightForSelf = titleLabelHeight + subtitleLabelHeight + (self.subtitleLabel.text == nil || self.titleLabel.text == nil ? kMargin*2.f : kMargin*2.5f);
     
