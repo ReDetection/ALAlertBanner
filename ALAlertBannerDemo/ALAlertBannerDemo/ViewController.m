@@ -10,6 +10,7 @@
 #import "ALAlertBanner.h"
 #import "AppDelegate.h"
 #import "TableViewController.h"
+#import "ALBannerStyleConfiguration.h"
 
 @interface ViewController ()
 
@@ -133,10 +134,31 @@
     self.changeTextButton.frame = CGRectMake(self.bottomButton.frame.origin.x, self.animationDurationSlider.frame.origin.y + self.animationDurationSlider.frame.size.height + 20.f, self.bottomButton.frame.size.width, self.bottomButton.frame.size.height);
 }
 
+- (ALBannerStyleConfiguration *)randomBannerStyleConfiguration {
+    NSInteger styleNumber = arc4random_uniform(4);
+    ALBannerStyleConfiguration *styleConfiguration = nil;
+    switch (styleNumber) {
+        case 0:
+            styleConfiguration = [ALBannerStyleConfiguration successStyleConfiguration];
+            break;
+        case 1:
+            styleConfiguration = [ALBannerStyleConfiguration failureStyleConfiguration];
+            break;
+        case 2:
+            styleConfiguration = [ALBannerStyleConfiguration notifyStyleConfiguration];
+            break;
+        case 3:
+            styleConfiguration = [ALBannerStyleConfiguration warningStyleConfiguration];
+            break;
+        default:
+            styleConfiguration = [ALBannerStyleConfiguration successStyleConfiguration];
+    }
+    return styleConfiguration;
+}
+
 - (void)showAlertBannerInView:(UIButton *)button {
     ALAlertBannerPosition position = (ALAlertBannerPosition)button.tag;
-    ALAlertBannerStyle randomStyle = (ALAlertBannerStyle)(arc4random_uniform(4));
-    ALAlertBanner *banner = [ALAlertBanner alertBannerForView:self.view style:randomStyle position:position title:@"Lorem ipsum dolor sit amet, consectetur adipiscing elit." subtitle:[AppDelegate randomLoremIpsum] tappedBlock:^(ALAlertBanner *alertBanner) {
+    ALAlertBanner *banner = [ALAlertBanner alertBannerForView:self.view styleConfiguration:[self randomBannerStyleConfiguration] position:position title:@"Lorem ipsum dolor sit amet, consectetur adipiscing elit." subtitle:[AppDelegate randomLoremIpsum] tappedBlock:^(ALAlertBanner *alertBanner) {
         NSLog(@"tapped!");
         [alertBanner hide];
     }];
@@ -154,9 +176,8 @@
 
 - (void)showAlertBannerInWindow:(UIButton *)button {
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    ALAlertBannerStyle randomStyle = (ALAlertBannerStyle)(arc4random_uniform(4));
     ALAlertBannerPosition position = (ALAlertBannerPosition)button.tag;
-    ALAlertBanner *banner = [ALAlertBanner alertBannerForView:appDelegate.window style:randomStyle position:position title:@"Lorem ipsum dolor sit amet, consectetur adipiscing elit." subtitle:[AppDelegate randomLoremIpsum] tappedBlock:^(ALAlertBanner *alertBanner) {
+    ALAlertBanner *banner = [ALAlertBanner alertBannerForView:appDelegate.window styleConfiguration:[self randomBannerStyleConfiguration] position:position title:@"Lorem ipsum dolor sit amet, consectetur adipiscing elit." subtitle:[AppDelegate randomLoremIpsum] tappedBlock:^(ALAlertBanner *alertBanner) {
         NSLog(@"tapped!");
         [alertBanner hide];
     }];
