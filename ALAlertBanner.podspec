@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
 	s.homepage		= 'https://github.com/alobi/ALAlertBanner'
 	s.author		= { 'Anthony Lobianco' => 'anthony@lobian.co' }
 	s.license 		= 'MIT'
-	s.platform		= :ios, '5.0'
+	s.platform		= :ios, '7.0'
 	s.requires_arc	= true
 	s.screenshots	= [ 'http://alobi.github.io/ALAlertBanner/screenshots/screenshot3.png',
 						'http://alobi.github.io/ALAlertBanner/screenshots/screenshot2.png' ]
