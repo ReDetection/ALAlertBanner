@@ -335,18 +335,22 @@
     for (UIView *view in self.bannerViews) {
         NSArray *topBanners = [view.alertBanners filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.position == %i", ALAlertBannerPositionTop]];
         CGFloat topYCoord = 0.f;
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-        if (AL_IOS_7_OR_GREATER && topBanners.count > 0) {
+        if (topBanners.count > 0) {
             ALAlertBanner *firstBanner = (ALAlertBanner *)[topBanners objectAtIndex:0];
             id nextResponder = [firstBanner nextAvailableViewController:firstBanner];
             if (nextResponder) {
                 UIViewController *vc = nextResponder;
-                if (!(vc.automaticallyAdjustsScrollViewInsets && [vc.view isKindOfClass:[UIScrollView class]])) {
-                    topYCoord += [vc topLayoutGuide].length;
+                if ([vc.view isKindOfClass:[UIScrollView class]]) {
+                    UIScrollView *scrollView = (UIScrollView *)vc.view;
+                    switch (scrollView.contentInsetAdjustmentBehavior) {
+                        case UIScrollViewContentInsetAdjustmentAlways: break;
+                        case UIScrollViewContentInsetAdjustmentAutomatic: break;
+                        case UIScrollViewContentInsetAdjustmentScrollableAxes: break;
+                        case UIScrollViewContentInsetAdjustmentNever: topYCoord += scrollView.safeAreaInsets.top;
+                    }
                 }
             }
         }
-#endif
         for (ALAlertBanner *alertBanner in [topBanners reverseObjectEnumerator]) {
             [alertBanner updateSizeAndSubviewsAnimated:YES];
             [alertBanner updatePositionAfterRotationWithY:topYCoord animated:YES];

@@ -540,21 +540,24 @@ static CGFloat const kForceHideAnimationDuration = 0.1f;
     CGRect frame = CGRectMake(0.f, 0.f, superview.bounds.size.width, heightForSelf);
     CGFloat initialYCoord = 0.f;
     switch (self.position) {
-        case ALAlertBannerPositionTop:
+        case ALAlertBannerPositionTop: {
             initialYCoord = -heightForSelf;
             if (isSuperviewKindOfWindow) initialYCoord += [UIApplication statusBarHeight];
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-            if (AL_IOS_7_OR_GREATER) {
-                id nextResponder = [self nextAvailableViewController:self];
-                if (nextResponder) {
-                    UIViewController *vc = nextResponder;
-                    if (!(vc.automaticallyAdjustsScrollViewInsets && [vc.view isKindOfClass:[UIScrollView class]])) {
-                        initialYCoord += [vc topLayoutGuide].length;
+            id nextResponder = [self nextAvailableViewController:self];
+            if (nextResponder) {
+                UIViewController *vc = nextResponder;
+                if ([vc.view isKindOfClass:[UIScrollView class]]) {
+                    UIScrollView *scrollView = (UIScrollView *)vc.view;
+                    switch (scrollView.contentInsetAdjustmentBehavior) {
+                        case UIScrollViewContentInsetAdjustmentAlways: break;
+                        case UIScrollViewContentInsetAdjustmentAutomatic: break;
+                        case UIScrollViewContentInsetAdjustmentScrollableAxes: break;
+                        case UIScrollViewContentInsetAdjustmentNever: initialYCoord += scrollView.safeAreaInsets.top;
                     }
                 }
             }
-#endif
             break;
+        }
         case ALAlertBannerPositionBottom:
             initialYCoord = superview.bounds.size.height;
             break;
